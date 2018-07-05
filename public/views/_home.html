@@ -1,0 +1,28 @@
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <h3 class="mb-3">List of Photos (<span id="counter">0</span>)</h3>
+            <div>
+                <ul id="photos" class="list-unstyled"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function deletePhoto(idPhoto) {
+        $.ajax({
+            url: `http://${window.location.host}/api/photos/${idPhoto}`,
+            type: 'delete',
+            success: function(result) {
+                alert('Photo deleted');
+                $(`#photo-${idPhoto}`).remove();
+                $('#counter').text($('#counter').text()-1);
+            }
+        });
+    }
+
+    function editPhoto(idPhoto) {
+        $(location).attr('href', `#_add?${idPhoto}`);
+    }
+</script>

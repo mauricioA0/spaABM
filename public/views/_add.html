@@ -1,0 +1,67 @@
+<div class="row">
+    <div class="col-md-5 mx-auto">
+        <h3 class="mb-3" id="title">Add new photo</h3>
+        <form id="form" action="#addphoto" method="POST" enctype="multipart/form-data">
+            <div class="custom-file mb-3" id="img"></div>
+            <div class="custom-file mb-3">
+                <input type="file" id="file" accept=".png,.jpg,.gif" required name="photoImg">
+                <small class="text-muted">
+                JPG, PNG or GIF (size max 320px*320px) 
+                </small>
+            </div>
+            <div class="form-group">
+                <label for="description">Description*</label>
+                <input id="description" required maxlength="300" type="text" class="form-control" name="description">
+            </div>
+            <div class="form-group">
+                <button id="confirm" class="btn btn-primary">Confirm</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="position-fixed" style="top: 3rem; right: 3rem;">
+    <div class="col-md-12">
+        <div id="notificationsContainer">
+        </div>
+    </div>
+</div>
+
+<script>
+var $id = '';
+if (window.location.hash.split('?').length !== 1) {
+    console.log(`{{env(APP_URL)}}`);
+    $id = window.location.hash.split('?')[1];
+    $.get(`http://${window.location.host}/api/photos/${$id}`, function (response) {
+        console.log(response);
+        $('#description').val(response.description);
+        $('#file').removeAttr('required');
+        $('#img').append(`<p><img src='${response.file_path}' width='80px'/></p>`);
+        $('#title').empty().append(`Edit the photo`);
+    });
+}
+
+$('#form').on('submit', function (event) {
+    $.ajax({
+        url: `http://${window.location.host}/api/photos/${$id}`,
+        type: $(this).attr('method'),
+        dataType: 'JSON',
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        success: function (data, status)
+        {
+            alert(data);
+            $(location).attr('href', '/#');
+        },
+        error: function (xhr, desc, err)
+        {
+            for(var error in xhr.responseJSON) {
+                alert(xhr.responseJSON[error]);
+            }
+        }
+    }); 
+    event.preventDefault();
+});
+
+</script>
