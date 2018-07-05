@@ -58,3 +58,24 @@ function getAllPhotos() {
         updateCounter(response.length);
     });
 }
+
+
+$.ajax({
+type: "guardaar.php",
+url: url,
+data: $("#formulario").serialize(), // Adjuntar los campos del formulario enviado.
+success: function(data) {
+    $('#step3, #uplogo, #apprnt, #crearlogo, #uplogo, #apprnt, #step3').fadeOut("slow");
+    $('#uplogo, #crearlogo, #firstpaso, #uploadlogo, #firstpaso').fadeOut("fast");
+    $('#firstpaso, #resultadofinal').fadeIn("slow");
+
+    $("#formulario")[0].reset();
+    $("#respuesta").html(data); // Mostrar la respuestas del script PHP.
+}
+
+});
+
+return false; // Evitar ejecutar el submit del formulario.
+} else {
+$("#respuesta").html("<p>Por favor acepte terminos y condiciones.</p>")
+}
